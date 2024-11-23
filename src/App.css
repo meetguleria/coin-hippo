@@ -1,11 +1,10 @@
-
-:root{
-  --text-primary:#000;
-  --bgPrimary:#fff;
- --bgSecondary: #F9F9F9;
- --pink: #0071bd;
- --light-blue: #e6f7ff;
- --border: #d9d9d9;
+:root {
+  --text-primary: #000;
+  --bgPrimary: #fff;
+  --bgSecondary: #F9F9F9;
+  --pink: #0071bd;
+  --light-blue: #e6f7ff;
+  --border: #d9d9d9;
 }
 
 * {
@@ -14,131 +13,178 @@
   box-sizing: border-box;
 }
 
-a:hover{
+a:hover {
   color: var(--pink) !important;
 }
 
-.app{
+.app {
   display: flex;
   overflow: hidden;
 }
 
-.navbar{
-  flex: 0.2;
-  background-color: rgb(0, 21, 41);
-}
-
-.main{
-  flex: 0.8;
-  width: 100%;
-  
-}
-.routes{
-  padding: 20px;
-}
-.nav-container{
+/* Sidebar (Navbar) Styles */
+.nav-container {
   position: fixed;
   left: 0;
-  margin: 10px;
   height: 100vh;
-  margin: 0px;
   background-color: rgb(0, 21, 41);
+  transition: all 0.3s ease;
+  width: 200px; /* Default expanded width */
 }
 
-.logo-container{
+.nav-container.collapsed {
+  width: 80px; /* Collapsed width */
+}
+
+.logo-container {
   background-color: #001529;
   display: flex;
   padding: 20px;
   align-items: center;
   width: 100%;
 }
-.logo{
-  margin:0 0 0 15px;
-}
-.logo a{
- color: white;
-}
-.menu-control-container{
-  display: none !important;
-  position: absolute !important;
-  right: 10px !important;
-  top: 25px !important;
-  font-size: 1.2rem !important;
-  background-color: var(--bgSecondary) !important;
-  border: none !important;
+
+.logo {
+  margin: 0 0 0 15px;
 }
 
-.loader{
+.logo a {
+  color: white;
+}
+
+.menu-control-container {
+  display: block;
+  margin: 10px auto;
+  font-size: 1.2rem;
+  background-color: var(--bgSecondary);
+  border: none;
+  padding: 5px 10px;
+  color: var(--pink);
+  cursor: pointer;
+}
+
+.menu-control-container:hover {
+  background-color: var(--light-blue);
+}
+
+/* Main Content Area */
+.main {
+  flex: 1;
+  margin-left: 200px; /* Matches expanded sidebar width */
+  padding: 20px;
+  transition: margin-left 0.3s ease;
+  background-color: var(--bgPrimary);
+}
+
+.main.collapsed {
+  margin-left: 80px; /* Matches collapsed sidebar width */
+}
+
+/* Routes Section */
+.routes {
+  padding: 20px;
+}
+
+.loader {
   height: 81vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-@media screen and (max-width:1300px){
-  .main{
-      margin-left: 50px;
+/* Responsive Design */
+@media screen and (max-width: 800px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .nav-container {
+    position: fixed;
+    width: 100%; /* Sidebar becomes a top bar */
+    height: 8vh;
+  }
+
+  .main {
+    margin-left: 0;
+    margin-top: 8vh; /* Adjust for top bar height */
+  }
+
+  .menu-control-container {
+    display: block !important;
+  }
+
+  .ant-menu {
+    position: absolute;
+    right: 0px;
   }
 }
 
-@media screen and (max-width:1170px){
-  .main{
-      margin-left: 50px;
-  }
+/* Statistics and Cards */
+.heading {
+  text-align: center;
+  color: var(--text-primary);
+  margin-bottom: 20px;
 }
 
-@media screen and (max-width:1000px){
-  .main{
-      margin-left: 100px;
-  }
+.ant-statistic-title {
+  font-size: 1rem;
+  color: var(--text-primary);
 }
 
-@media screen and (max-width:800px){
-  .app{
-      flex-direction: column;
-      overflow: hidden;
-  }
-
-  .navbar{
-      flex: 1;
-  }
-
-  .main{
-      flex: 1;
-      margin-top: 90px;
-      margin-left: 0px;
-      margin-right: 10px;
-  }
-
-  .nav-container{
-      height: 8vh;
-      position:fixed;
-      width: 100%;
-      z-index: 100;
-      background-color: var(--bgSecondary);
-  }
-
-  .menu-control-container{
-      display: block !important;
-  }
-
-  .ant-menu{
-      position: absolute;
-      right: 0px;
-  }
-  .home-title{
-      font-size: 1.4rem !important;
-  }
-  .show-more{
-      font-size: 1.3rem !important;
-  }
+.ant-statistic-content-value {
+  font-size: 1.5rem;
+  color: var(--pink);
 }
 
-.coin-detail-container{
+.card-container {
+  margin-top: 20px;
+}
+
+.card-container .ant-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-container .ant-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-container .ant-card-title {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.card-container .ant-card-body p {
+  color: var(--text-primary);
+  margin: 5px 0;
+}
+
+/* Footer */
+.footer {
+  background-color: #001529;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  align-items: center;
+}
+
+.footer a {
+  color: white;
+  margin: 0 10px;
+}
+
+.footer a:hover {
+  color: var(--pink);
+}
+
+/* Additional Coin Details */
+.coin-detail-container {
   margin: 30px;
 }
 
-.coin-heading-container{
+.coin-heading-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -149,231 +195,60 @@ a:hover{
   gap: 10px;
 }
 
-.coin-heading-container .coin-name{
+.coin-heading-container .coin-name {
   font-weight: 900;
   color: var(--pink);
 }
 
-.coin-heading-container p{
+.coin-heading-container p {
   font-size: 1rem;
   opacity: 0.9;
   margin-bottom: 20px;
 }
 
-.stats-container{
+.stats-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 40px;
 }
 
-.stats-container h2{
+.stats-container h2 {
   font-weight: 700;
   font-size: 1.4rem;
   margin-top: 20px;
   color: var(--pink);
 }
 
-.coin-details-heading{
+.coin-details-heading {
   font-weight: 700 !important;
   margin-top: 20px !important;
   color: var(--pink) !important;
 }
 
-.coin-stats{
+.coin-stats {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid var(--border);
   font-size: 1rem;
   opacity: 0.9;
   padding: 20px;
-
 }
 
-.coin-stats-name{
+.coin-stats-name {
   display: flex;
   gap: 10px;
   font-size: 1rem;
 }
 
-.stats{
+.stats {
   font-weight: 800;
 }
 
-.coin-value-statistics-heading p{
-  font-size: 1rem;
-  opacity: 0.9;
-}
-
-.coin-desc-link{
-  display: flex;
-  gap: 40px;
-  margin-top: 40px;
-  padding-top: 20px;
-}
-
-.coin-desc-link h2{
-  font-weight: 700;
-  color: var(--pink);
-}
-
-.coin-desc-link p{
-  font-size: 1rem;
-  opacity: 0.9;
-}
-
-.coin-desc-link a{
-  color: var(--pink);
-}
-
-.coin-desc-link h3{
-  font-weight: 700;
-}
-
-.coin-desc{
-  flex: 0.5;
-}
-
-.coin-links{
-padding: 0px 20px;
-  flex: 0.5;
-}
-
-.coin-link{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--border);
-  padding: 20px;
-}
-
-.link-name{
-  text-transform: capitalize;
-  font-size: 1rem;
-}
-
-.coin-link a{
-  color: var(--pink);
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.coin-link:hover, .coin-stats:hover{
-  background-color: var(--bgSecondary);
-}
-
-@media screen and (max-width:1000px){
-  .stats-container{
-      flex-direction: column;
-  }
-  .coin-desc-link{
-      flex-direction: column;
-  }
-  .stats-container h2{
-      margin-top: 0px;
+/* Responsive Stats */
+@media screen and (max-width: 1000px) {
+  .stats-container {
+    flex-direction: column;
   }
 }
 
-@media screen and (max-width: 500px){
-  .coin-links{
-      padding: 0px;
-  }
-  .coin-detail-container{
-      margin: 0;
-  }
-}
-@media screen and (max-width: 500px){
-  .heading{
-      margin-top: 20px;
-  }
-}
-
-.select-news{
-  width: 180px;
-}
-.news-card{
-  min-height: 300px !important;
-}
-.news-image-container{
-  display: flex !important;
-  justify-content: space-between !important;
-}
-.news-title{
-width: 70%;
-}
-
-.news-image-container .img{
-  width:100px;
-  height:100px;
-}
-.news-card p{
-  color: black;
-  margin: 10px 0px !important;
-}
-.provider-container{
-  display: flex;
-  justify-content: space-between;
-}
-.provider-name{
-  margin-left: 10px;
-}
-
-.chart-header{
-  display: flex;
-  justify-content: space-between;
-  gap: 50px;
-  color: #0071bd;
-}
-.chart-title{
-  color: #0071bd !important;
-}
-.price-container{
-  display: flex !important;
-  gap: 20px !important;
-  align-items: center !important;
-  flex-wrap: wrap !important;
-}
-.price-change{
-  font-weight: 900 !important;
-}
-.current-price{
-  margin-top: 0px !important;
-  font-weight: 900 !important;
-}
-.home-heading-container{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 40px;
-}
-.show-more{
-  margin-top: 0px !important;
-}
-.exchange-image{
-  margin: 0px 10px !important;
-}
-.search-crypto{
-  margin: 20px auto 30px auto;
-  width: 250px;
-}
-.crypto-card-container{
-  min-height: 65vh !important;
-}
-.crypto-card{
-  min-width: 250px;
-}
-.crypto-card .crypto-image{
-  width:35px;
-}
-.select-timeperiod{
-  width: 200px !important;
-  margin-top: 20px !important;
-}
-
-.footer {
-  background-color: #001529;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  align-items: center;
-}
