@@ -1,96 +1,60 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { scaleTime, scaleLinear } from '@visx/scale';
-import { max, extent } from 'd3-array';
-import { GridLines, AreaChart, Tooltips } from './ChartComponents';
-import apiService from '../services/apiService';
+import AreaChart from './ChartComponents/AreaChart';
+import GridLines from './ChartComponents/GridLines';
+import Tooltips from './ChartComponents/Tooltips';
+import { normalizeCryptoData } from '../utils/normalizeCryptoData';
+import { createXScale, createYScale } from './ChartComponents/Scales';
+import { useTooltip } from '@visx/tooltip';
+import { themeColors } from './ChartComponents/ChartTheme';
 
-const Chart = ({ id }) => {
+const Chart = ({ priceHistory, width, height, margin }) => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [tooltipData, setTooltipData] = useState(null);
+  const { tooltipData, tooltipLeft, tooltipTop, showTooltip, hideTooltip } = useTooltip();
 
   useEffect(() => {
-    const fetchChartData = async () => {
-      try {
-        const response = await apiService.getCryptoMarketChart(id, 30);
-        if (response?.prices) {
-          const formattedData = response.prices.map(([timestamp, price]) => ({
-            date: new Date(timestamp),
-            price,
-          }));
-          setData(formattedData);
-        }
-      } catch (error) {
-        console.error('Error fetching chart data:', error);
-      } finally {
-        setLoading(false); // Ensure loading stops even if the API fails
-      }
-    };
+    if (priceHistory?.prices?.length) {
+      const normalizedData = normalizeCryptoData(priceHistory);
+      setData(normalizedData);
+    }
+  }, [priceHistory]);
 
-    fetchChartData();
-  }, [id]);
+  if (!data.length) return <div>Loading...</div>;
 
-  if (loading) {
-    return <div>Loading chart...</div>; // Placeholder while loading
-  }
-
-  if (!data.length) {
-    return <div>No data available to display the chart.</div>; // Fallback for no data
-  }
-
-  const width = 800;
-  const height = 400;
-  const margin = { top: 20, right: 20, bottom: 50, left: 70 };
-
-  const xScale = useMemo(
-    () =>
-      scaleTime({
-        domain: extent(data, (d) => d.date),
-        range: [margin.left, width - margin.right],
-      }),
-    [data, margin.left, margin.right]
-  );
-
-  const yScale = useMemo(
-    () =>
-      scaleLinear({
-        domain: [0, max(data, (d) => d.price) || 1], // Fallback to 1 to avoid domain issues
-        range: [height - margin.bottom, margin.top],
-        nice: true,
-      }),
-    [data, margin.bottom, margin.top, height]
-  );
-
-  const colorTheme = {
-    bgFrom: '#3b6978',
-    bgTo: '#204051',
-    areaFrom: '#75daad',
-    areaTo: '#edffea',
-    line: '#fff',
-    tooltipBg: '#3b6978',
-    tooltipColor: '#fff',
-    tooltipBorder: '#fff',
-  };
+  const xScale = useMemo(() => createXScale(data, width, margin), [data, width, margin]);
+  const yScale = useMemo(() => createYScale(data, height, margin), [data, height, margin]);
 
   return (
     <svg width={width} height={height}>
-      <GridLines xScale={xScale} yScale={yScale} width={width} height={height} margin={margin} color="#d3d3d3" />
-      <AreaChart
-        data={data}
+      {/* Grid Lines */}
+      <GridLines
         xScale={xScale}
         yScale={yScale}
         width={width}
         height={height}
         margin={margin}
-        setTooltipData={setTooltipData}
-        colorTheme={colorTheme}
+        strokeColor={themeColors.gridStroke}
+        numTicks={5}
       />
-      <Tooltips
-        tooltipData={tooltipData}
-        xScale={xScale}
-        yScale={yScale}
-        colorTheme={colorTheme}
+
+      {/* Area Chart */}
+      <AreaChart
+        data={data}
+        width={width}
         height={height}
+        margin={margin}
+        showTooltip={showTooltip}
+        hideTooltip={hideTooltip}
+        setTooltipData={setData} // Assuming you update tooltip data dynamically
+        theme={themeColors}
+      />
+
+      {/* Tooltip */}
+      <Tooltips
+        theme={themeColors}
+        tooltipData={tooltipData}
+        tooltipLeft={tooltipLeft}
+        tooltipTop={tooltipTop}
+        innerHeight={height - margin.bottom - margin.top}
         margin={margin}
       />
     </svg>

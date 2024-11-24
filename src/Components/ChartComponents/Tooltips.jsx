@@ -1,75 +1,73 @@
-import React, { useCallback } from 'react';
-import { TooltipWithBounds } from '@visx/tooltip';
-import { Line, Bar } from '@visx/shape';
-import { localPoint } from '@visx/event';
+import { Tooltip, TooltipWithBounds } from '@visx/tooltip';
+import { Line } from '@visx/shape';
 
-const Tooltips = ({ data, xScale, yScale, width, height, margin, colorTheme }) => {
-  const [tooltipData, setTooltipData] = React.useState(null);
-  const [tooltipLeft, setTooltipLeft] = React.useState(null);
-  const [tooltipTop, setTooltipTop] = React.useState(null);
-
-  const handleTooltip = useCallback(
-    (event) => {
-      const { x } = localPoint(event) || { x: 0 };
-      const x0 = xScale.invert(x);
-      const index = data.findIndex((d) => d.date >= x0);
-      const d = data[index];
-      if (d) {
-        setTooltipData(d);
-        setTooltipLeft(xScale(d.date));
-        setTooltipTop(yScale(d.price));
-      }
-    },
-    [data, xScale, yScale]
-  );
+const TooltipComponent = ({
+  tooltipData,
+  tooltipLeft,
+  tooltipTop,
+  innerHeight,
+  margin,
+  theme,
+}) => {
+  if (!tooltipData) return null;
 
   return (
     <>
-      {/* Hoverable Bar */}
-      <Bar
-        x={margin.left}
-        y={margin.top}
-        width={width - margin.left - margin.right}
-        height={height - margin.top - margin.bottom}
-        fill="transparent"
-        onMouseMove={handleTooltip}
-        onMouseLeave={() => setTooltipData(null)}
+      {/* Vertical Line */}
+      <Line
+        from={{ x: tooltipLeft, y: margin.top }}
+        to={{ x: tooltipLeft, y: innerHeight + margin.top }}
+        stroke={theme.accentColorDark}
+        strokeWidth={2}
+        strokeDasharray="5,2"
+        pointerEvents="none"
       />
 
-      {/* Vertical Line */}
-      {tooltipData && (
-        <Line
-          from={{ x: tooltipLeft, y: margin.top }}
-          to={{ x: tooltipLeft, y: height - margin.bottom }}
-          stroke={colorTheme.line}
-          strokeWidth={2}
-          pointerEvents="none"
-          strokeDasharray="5,2"
-        />
-      )}
+      {/* Tooltip Circle */}
+      <circle
+        cx={tooltipLeft}
+        cy={tooltipTop}
+        r={4}
+        fill={theme.accentColorDark}
+        stroke="white"
+        strokeWidth={2}
+        pointerEvents="none"
+      />
 
-      {/* Tooltip */}
-      {tooltipData && (
-        <TooltipWithBounds
-          top={tooltipTop - 12}
-          left={tooltipLeft + 12}
-          style={{
-            backgroundColor: colorTheme.tooltipBg,
-            color: colorTheme.tooltipColor,
-            border: `1px solid ${colorTheme.tooltipBorder}`,
-            borderRadius: '4px',
-          }}
-        >
-          <div>
-            <strong>Price:</strong> ${tooltipData.price.toFixed(2)}
-          </div>
-          <div>
-            <strong>Date:</strong> {tooltipData.date.toDateString()}
-          </div>
-        </TooltipWithBounds>
-      )}
+      {/* Tooltip Box for Price */}
+      <TooltipWithBounds
+        key={Math.random()}
+        top={tooltipTop - 12}
+        left={tooltipLeft + 12}
+        style={{
+          backgroundColor: theme.background,
+          color: theme.tooltipTextColor,
+          border: `1px solid ${theme.tooltipBorderColor}`,
+          borderRadius: '4px',
+        }}
+      >
+        <div>
+          <strong>Price:</strong> ${tooltipData.price.toFixed(2)}
+        </div>
+      </TooltipWithBounds>
+
+      {/* Tooltip Box for Date */}
+      <Tooltip
+        top={innerHeight + margin.top + 5}
+        left={tooltipLeft}
+        style={{
+          backgroundColor: theme.background,
+          color: theme.tooltipTextColor,
+          border: `1px solid ${theme.tooltipBorderColor}`,
+          borderRadius: '4px',
+          textAlign: 'center',
+          transform: 'translateX(-50%)',
+        }}
+      >
+        {tooltipData.date.toLocaleDateString()}
+      </Tooltip>
     </>
   );
 };
 
-export default Tooltips;
+export default TooltipComponent;
