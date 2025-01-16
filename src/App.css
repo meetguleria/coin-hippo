@@ -1,3 +1,4 @@
+/* Variables */
 :root {
   --text-primary: #000;
   --bgPrimary: #fff;
@@ -7,163 +8,50 @@
   --border: #d9d9d9;
 }
 
+/* Global Styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+body,
+.ant-typography {
+  color: var(--text-primary);
+  font-family: 'Roboto', sans-serif;
+}
+
+a {
+  color: var(--pink);
+}
+
 a:hover {
-  color: var(--pink) !important;
+  color: var(--light-blue) !important;
 }
 
 .app {
   display: flex;
-  overflow: hidden;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
-/* Sidebar (Navbar) Styles */
-.nav-container {
-  position: fixed;
-  left: 0;
-  height: 100vh;
-  background-color: rgb(0, 21, 41);
-  transition: all 0.3s ease;
-  width: 200px; /* Default expanded width */
-}
-
-.nav-container.collapsed {
-  width: 80px; /* Collapsed width */
-}
-
-.logo-container {
-  background-color: #001529;
-  display: flex;
-  padding: 20px;
-  align-items: center;
-  width: 100%;
-}
-
-.logo {
-  margin: 0 0 0 15px;
-}
-
-.logo a {
-  color: white;
-}
-
-.menu-control-container {
-  display: block;
-  margin: 10px auto;
-  font-size: 1.2rem;
-  background-color: var(--bgSecondary);
-  border: none;
-  padding: 5px 10px;
-  color: var(--pink);
-  cursor: pointer;
-}
-
-.menu-control-container:hover {
-  background-color: var(--light-blue);
-}
-
-/* Main Content Area */
 .main {
   flex: 1;
-  margin-left: 200px; /* Matches expanded sidebar width */
+  margin-left: 200px; /* Can be adjusted or removed based on the layout in components */
   padding: 20px;
-  transition: margin-left 0.3s ease;
   background-color: var(--bgPrimary);
 }
 
-.main.collapsed {
-  margin-left: 80px; /* Matches collapsed sidebar width */
-}
-
-/* Routes Section */
-.routes {
-  padding: 20px;
-}
-
-.loader {
-  height: 81vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Responsive Design */
 @media screen and (max-width: 800px) {
-  .app {
-    flex-direction: column;
-  }
-
-  .nav-container {
-    position: fixed;
-    width: 100%; /* Sidebar becomes a top bar */
-    height: 8vh;
-  }
-
   .main {
     margin-left: 0;
-    margin-top: 8vh; /* Adjust for top bar height */
+    margin-top: 60px; /* Adjust for mobile navbar height if applicable */
   }
-
-  .menu-control-container {
-    display: block !important;
-  }
-
-  .ant-menu {
-    position: absolute;
-    right: 0px;
-  }
-}
-
-/* Statistics and Cards */
-.heading {
-  text-align: center;
-  color: var(--text-primary);
-  margin-bottom: 20px;
-}
-
-.ant-statistic-title {
-  font-size: 1rem;
-  color: var(--text-primary);
-}
-
-.ant-statistic-content-value {
-  font-size: 1.5rem;
-  color: var(--pink);
-}
-
-.card-container {
-  margin-top: 20px;
-}
-
-.card-container .ant-card {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card-container .ant-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.card-container .ant-card-title {
-  font-weight: bold;
-  color: var(--text-primary);
-}
-
-.card-container .ant-card-body p {
-  color: var(--text-primary);
-  margin: 5px 0;
 }
 
 /* Footer */
 .footer {
-  background-color: #001529;
+  background-color: #001529; /* Matches the sidebar color */
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -179,76 +67,10 @@ a:hover {
   color: var(--pink);
 }
 
-/* Additional Coin Details */
-.coin-detail-container {
-  margin: 30px;
-}
-
-.coin-heading-container {
+/* Utility Classes for Consistent Styling */
+.loader {
+  height: 81vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  border-bottom: 1px solid var(--border);
-  padding-top: 20px;
-  padding-bottom: 20px;
-  gap: 10px;
 }
-
-.coin-heading-container .coin-name {
-  font-weight: 900;
-  color: var(--pink);
-}
-
-.coin-heading-container p {
-  font-size: 1rem;
-  opacity: 0.9;
-  margin-bottom: 20px;
-}
-
-.stats-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 40px;
-}
-
-.stats-container h2 {
-  font-weight: 700;
-  font-size: 1.4rem;
-  margin-top: 20px;
-  color: var(--pink);
-}
-
-.coin-details-heading {
-  font-weight: 700 !important;
-  margin-top: 20px !important;
-  color: var(--pink) !important;
-}
-
-.coin-stats {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  font-size: 1rem;
-  opacity: 0.9;
-  padding: 20px;
-}
-
-.coin-stats-name {
-  display: flex;
-  gap: 10px;
-  font-size: 1rem;
-}
-
-.stats {
-  font-weight: 800;
-}
-
-/* Responsive Stats */
-@media screen and (max-width: 1000px) {
-  .stats-container {
-    flex-direction: column;
-  }
-}
-
