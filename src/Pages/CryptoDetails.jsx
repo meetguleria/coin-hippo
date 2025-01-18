@@ -27,15 +27,15 @@ const HeaderSection = styled.div`
 `;
 
 const CryptoLogo = styled.img`
-  height: 30px;  /* Smaller height for better alignment */
+  height: 30px;
   width: auto;
-  margin-right: 10px; /* Space between logo and title */
+  margin-right: 10px;
 `;
 
 const CryptoTitle = styled(Title)`
   margin: 0;
   color: #005ea5;
-  font-size: 20px; /* Smaller font size to align with the navbar */
+  font-size: 20px;
 `;
 
 // Card and Containers Styling
@@ -90,26 +90,35 @@ function CryptoDetails() {
     // Fetch crypto details and market chart data
     const fetchDetails = async () => {
       try {
-        setLoading(true); // Set loading to true before fetching data
+        setLoading(true);
 
-        const [details, ohlcvData] = await Promise.all([
-          apiService.getCryptoDetails(id), // Fetch the crypto details
-          fetchOHLCV(`${id.toUpperCase()}/USDT`, '1h', 100), // Fetch OHLCV data from ccxt
-        ]);
-
+        const details = await apiService.getCryptoDetails(id);
         setCryptoDetails(details);
 
-        if (ohlcvData.success) {
-          setPriceHistory(ohlcvData.data); // Set chart data if successful
-        } else {
-          console.error('Error fetching OHLCV data:', ohlcvData.error.message);
+        const symbol = details?.symbol?.toUpperCase();
+        if (!symbol) {
+          setPriceHistory([]);
+          return;
         }
-      } catch (error) {
-        console.error('Error fetching data in useEffect:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+
+        const ohlcvData = await fetchOHLCV(`${symbol}/USDT`, '1h', 100);
+
+        // Validate the returned data instead of relying on a `success` flag
+        const isValidData = Array.isArray(ohlcvData) && ohlcvData.length > 0; // Fix: Validate directly against the array
+        if (isValidData) {
+          const normalizedData = normalizeCryptoData(ohlcvData); // Directly normalize the raw data
+          setPriceHistory(normalizedData);
+        } else {
+          console.error('[FetchDetails] Invalid or empty OHLCV data:', ohlcvData);
+          setPriceHistory([]);
+        }
+    } catch (error) {
+      console.error('[FetchDetails] Error fetching data:', error.message || error);
+      setPriceHistory([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
     fetchDetails();
   }, [id]);
@@ -124,7 +133,7 @@ function CryptoDetails() {
       {/* Header Section for Crypto Logo and Title */}
       <HeaderSection>
         <CryptoLogo
-          src={cryptoDetails.image.small}  // Use a smaller version of the logo for consistency
+          src={cryptoDetails.image.small}
           alt={cryptoDetails.name}
         />
         <CryptoTitle level={4}>

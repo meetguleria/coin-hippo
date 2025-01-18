@@ -21,7 +21,7 @@
     "@visx/shape": "^3.12.0",
     "@visx/tooltip": "^3.12.0",
     "@visx/visx": "^3.12.0",
-    "antd": "^5.22.2",
+    "antd": "^5.23.1",
     "ccxt": "^4.4.48",
     "d3-array": "^3.2.4",
     "d3-time-format": "^4.1.0",

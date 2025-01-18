@@ -4,6 +4,9 @@ export async function fetchOHLCV(symbol, timeframe='1h', limit=100) {
   const exchange = getExchange();
   try {
     const ohlcv = await exchange.fetchOHLCV(symbol, timeframe, undefined, limit);
+
+    console.log('Raw OHLCV response:', ohlcv);
+
     return ohlcv.map(([timestamp, open, high, low, close, volume]) => ({
       date: new Date(timestamp),
       open,

@@ -1,12 +1,12 @@
 // Normalizes the raw crypto market chart data from the CoinGecko API.
-export const normalizeCryptoData = (apiData) => {
-  if (!apiData || !apiData.prices) {
-    console.error('Invalid API data provided to normalizeCryptoData');
+export const normalizeCryptoData = (rawOHLCV) => {
+  if (!Array.isArray(rawOHLCV) || rawOHLCV.length === 0) {
+    console.error('Invalid or empty OHLCV data provided to normalizeCryptoData');
     return [];
   }
 
-  return apiData.prices.map(([timestamp, price]) => ({
-    date: new Date(timestamp),
-    price,
+  return rawOHLCV.map(([timestamp, , , , close]) => ({
+    date: new Date(timestamp), // Convert the timestamp to a Date object.
+    price: close,              // Extract the close price.
   }));
 };

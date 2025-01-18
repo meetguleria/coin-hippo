@@ -1,5 +1,4 @@
-/** @jsxImportSource @emotion/react */
-import React, { useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import { AreaClosed, Line, Bar } from '@visx/shape';
 import { curveMonotoneX } from '@visx/curve';
 import { GridRows, GridColumns } from '@visx/grid';

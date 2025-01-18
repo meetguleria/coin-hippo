@@ -27,13 +27,15 @@ const fetchBinanceMarkets = async () => {
 export const generateSymbolMapping = async (coingeckoData) => {
   const cachedMappings = getFromCache(CACHE_KEY);
   if (cachedMappings && Date.now() - cachedMappings.timestamp < CACHE_EXPIRY_TIME) {
+    console.log('[SymbolMapping] Returning cached mappings.');
     return cachedMappings.data;
   }
 
   try {
     const binanceMarkets = await fetchBinanceMarkets();
-    const symbolMappings = {};
+    console.log('[SymbolMapping] Binance markets fetched:', binanceMarkets);
 
+    const symbolMappings = {};
     coingeckoData.forEach((coin) => {
       const { symbol } = coin;
       const binanceSymbol = `${symbol.toUpperCase()}/USDT`;
@@ -42,6 +44,8 @@ export const generateSymbolMapping = async (coingeckoData) => {
         symbolMappings[id] = binanceMarkets[binanceSymbol];
       }
     });
+
+    console.log('[SymbolMapping] Generated symbol mappings:', symbolMappings);
 
     saveToCache(CACHE_KEY, { timestamp: Date.now(), data: symbolMappings });
     return symbolMappings;
