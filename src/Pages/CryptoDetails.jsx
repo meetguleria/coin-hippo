@@ -4,7 +4,6 @@ import { Typography, Row, Col, Spin, Card, Descriptions, Divider, Button } from 
 import styled from '@emotion/styled';
 import apiService from '../services/apiService';
 import { fetchOHLCV } from '../services/ccxtService';
-import { normalizeCryptoData } from '../utils/normalizeCryptoData';
 import Chart from '../Components/Chart';
 import { ParentSize } from '@visx/responsive';
 
@@ -106,8 +105,8 @@ function CryptoDetails() {
         // Validate the returned data instead of relying on a `success` flag
         const isValidData = Array.isArray(ohlcvData) && ohlcvData.length > 0; // Fix: Validate directly against the array
         if (isValidData) {
-          const normalizedData = normalizeCryptoData(ohlcvData); // Directly normalize the raw data
-          setPriceHistory(normalizedData);
+          // We can directly set the data if ccxtService returns { date, price }
+          setPriceHistory(ohlcvData);
         } else {
           console.error('[FetchDetails] Invalid or empty OHLCV data:', ohlcvData);
           setPriceHistory([]);
