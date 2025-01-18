@@ -1,13 +1,12 @@
 import { useContext } from 'react';
 import { Typography, Row, Col, Statistic, Card, Spin } from 'antd';
 import { Link } from 'react-router-dom';
-
 import { CryptoContext } from '../contexts/CryptoContext';
 
 const { Title } = Typography;
 
 function Homepage() {
-  const { coins, loading } = useContext(CryptoContext);
+  const { coins, globalStats, loading } = useContext(CryptoContext);
 
   // Get the top 10 cryptocurrencies from the context
   const top10Coins = coins.slice(0, 10);
@@ -24,7 +23,7 @@ function Homepage() {
           <Col xs={24} sm={12} md={8}>
             <Statistic
               title="Total Cryptocurrencies"
-              value={globalStats.active_cryptocurrencies}
+              value={globalStats?.active_cryptocurrencies}
             />
           </Col>
           <Col xs={24} sm={12} md={8}>
@@ -33,21 +32,23 @@ function Homepage() {
           <Col xs={24} sm={12} md={8}>
             <Statistic
               title="Total Market Cap"
-              value={`$${(globalStats.total_market_cap.usd / 1e12).toFixed(
-                2
-              )}T`}
-            />
+              value={
+                globalStats?.total_market_cap?.usd
+                  ? `$${(globalStats.total_market_cap.usd / 1e12).toFixed(2)}T`
+                  : 'N/A'
+                }
+              />
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Statistic
               title="Total 24H Volume"
-              value={`$${(globalStats.total_volume.usd / 1e9).toFixed(2)}B`}
+              value={`$${(globalStats?.total_volume.usd / 1e9).toFixed(2)}B`}
             />
           </Col>
           <Col xs={24} sm={12} md={8}>
             <Statistic
               title="Market Cap Change 24H"
-              value={`${globalStats.market_cap_change_percentage_24h_usd.toFixed(
+              value={`${globalStats?.market_cap_change_percentage_24h_usd.toFixed(
                 2
               )}%`}
             />

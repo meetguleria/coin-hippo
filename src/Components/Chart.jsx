@@ -9,7 +9,6 @@ import { LinearGradient } from '@visx/gradient';
 import { max, extent, bisector } from 'd3-array';
 import { timeFormat } from 'd3-time-format';
 import styled from '@emotion/styled';
-import { normalizeCryptoData } from '../utils/normalizeCryptoData'; // Import normalization utility
 
 const ChartContainer = styled.div`
   position: relative;
@@ -50,13 +49,12 @@ const Chart = withTooltip(
 
     // Use normalized data here and add a console log to inspect it
     const data = useMemo(() => {
-      const normalizedData = normalizeCryptoData(priceHistory);
-      console.log('Normalized Data:', normalizedData); // Debug log to inspect normalized data
-      return normalizedData && normalizedData.length ? normalizedData : [];
+      console.log('Chart data:', priceHistory);
+      return Array.isArray(priceHistory) ? priceHistory : [];
     }, [priceHistory]);
 
     if (!data.length) {
-      console.warn('No data available for chart rendering'); // Warning if no data available
+      console.warn('No data available for chart rendering');
       return <div>No data available for the chart</div>;
     }
 
@@ -66,7 +64,7 @@ const Chart = withTooltip(
     const dateScale = useMemo(
       () => {
         const domainExtent = extent(data, getDate);
-        console.log('Date Scale Domain:', domainExtent); // Debug log to inspect the date scale domain
+        console.log('Date Scale Domain:', domainExtent);
         return scaleTime({
           range: [margin.left, innerWidth + margin.left],
           domain: domainExtent,
@@ -79,7 +77,7 @@ const Chart = withTooltip(
       () => {
         const minValue = Math.min(...data.map(getStockValue));
         const maxValue = max(data, getStockValue) || 0;
-        console.log('Stock Value Scale Domain:', [minValue, maxValue]); // Debug log for stock value domain
+        console.log('Stock Value Scale Domain:', [minValue, maxValue]);
 
         return scaleLinear({
           range: [innerHeight + margin.top, margin.top],

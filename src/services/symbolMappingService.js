@@ -14,7 +14,7 @@ const fetchBinanceMarkets = async () => {
     // Map Binance trading pairs to their respective symbols
     return Object.keys(markets).reduce((acc, pair) => {
       const { base, quote } = markets[pair];
-      acc[`$${base}/${quote}`] = pair;
+      acc[`${base}/${quote}`] = pair;
       return acc;
     }, {});
   } catch (error) {
