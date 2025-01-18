@@ -1,43 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useContext } from 'react';
 import { Typography, Row, Col, Statistic, Card, Spin } from 'antd';
 import { Link } from 'react-router-dom';
-import apiService from '../services/apiService';
+
+import { CryptoContext } from '../contexts/CryptoContext';
 
 const { Title } = Typography;
 
 function Homepage() {
-  const [globalStats, setGlobalStats] = useState(null);
-  const [cryptos, setCryptos] = useState([]); // Default to an empty array to avoid null issues
-  const [loading, setLoading] = useState(true);
+  const { coins, loading } = useContext(CryptoContext);
 
-  useEffect(() => {
-    const fetchGlobalStats = async () => {
-      try {
-        const data = await apiService.getGlobalStats();
-        setGlobalStats(data?.data); // Add optional chaining in case data is null or undefined
-      } catch (error) {
-        console.error('Error fetching global stats:', error);
-      }
-    };
-
-    const fetchCryptos = async () => {
-      try {
-        const data = await apiService.getCryptocurrencies('usd', 10);
-        setCryptos(data || []); // Set empty array as a fallback to avoid null values
-      } catch (error) {
-        console.error('Error fetching cryptocurrencies:', error);
-        setCryptos([]); // Ensure `cryptos` is never null even if the fetch fails
-      }
-    };
-
-    const fetchData = async () => {
-      setLoading(true);
-      await Promise.all([fetchGlobalStats(), fetchCryptos()]);
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
+  // Get the top 10 cryptocurrencies from the context
+  const top10Coins = coins.slice(0, 10);
 
   if (loading) return <Spin size="large" className="loader" />;
 
@@ -91,9 +64,9 @@ function Homepage() {
         </Title>
       </div>
 
-      {cryptos.length > 0 ? ( // Add conditional check for `cryptos` length
+      {top10Coins.length > 0 ? (
         <Row gutter={[16, 16]}>
-          {cryptos.map((crypto) => (
+          {top10Coins.map((crypto) => (
             <Col xs={24} sm={12} md={8} lg={6} xl={4} key={crypto.id}>
               <Link to={`/crypto/${crypto.id}`}>
                 <Card className="crypto-card" hoverable>
