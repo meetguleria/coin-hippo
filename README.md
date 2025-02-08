@@ -146,7 +146,7 @@ Usage
 	•	Placeholder pages to demonstrate routing; future expansions can integrate real exchange data or crypto-related news
 
 Project Structure
-
+```
 .
 ├── src
 │   ├── App.jsx               // Main layout with Sider & Routes
@@ -176,7 +176,7 @@ Project Structure
 │   └── setupTests.js         // Jest-DOM config
 ├── package.json
 └── ...
-
+```
 Caching Details
 	•	LocalStorage: The application checks for cached responses before making new requests to CoinGecko.
 	•	24-Hour Expiry: Each stored item has a timestamp; if 24 hours have passed, the cache is invalidated and re-fetched.
